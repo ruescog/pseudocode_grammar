@@ -1,0 +1,123 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+    <!-- tipos básicos -->
+    <xs:simpleType name="ctype">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(int|float|bool|char)(\*)*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="function_call">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="(.*)\((.*)\)" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- i/o -->
+    <xs:complexType name="read">
+        <xs:attribute name="variable" type="xs:string" use="required" />
+        <xs:attribute name="message" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <!-- definiciones de tipos -->
+    <xs:complexType name="definition">
+        <xs:attribute name="type" type="ctype" use="required" />
+        <xs:attribute name="variable" type="xs:string" use="required" />
+        <xs:attribute name="value" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <!-- asignaciones -->
+    <xs:complexType name="assignment">
+        <xs:sequence minOccurs="0">
+            <xs:element name="value" type="function_call" />
+        </xs:sequence>
+        <xs:attribute name="variable" type="xs:string" use="required" />
+        <xs:attribute name="value" type="xs:string" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="for_block">
+        <xs:complexContent>
+            <xs:extension base="sentence">
+                <xs:attribute name="index_name" type="xs:string" use="required" />
+                <xs:attribute name="from" type="xs:integer" use="required" />
+                <xs:attribute name="to" type="xs:string" use="required" />
+                <xs:attribute name="increment" type="xs:integer" use="required" />
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- sobre funciones -->
+    <xs:complexType name="function_header">
+        <xs:sequence>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="input" type="definition" />
+            </xs:sequence>
+            <xs:element name="output" minOccurs="0">
+                <xs:complexType>
+                    <xs:attribute name="type" type="ctype" use="required" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="function_body">
+        <xs:complexContent>
+            <xs:extension base="sentence">
+                <xs:sequence minOccurs="0">
+                    <xs:element name="return" type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="function">
+        <xs:sequence>
+            <xs:element name="doc" type="xs:string" />
+            <xs:element name="header" type="function_header" />
+            <xs:element name="body" type="function_body" />
+        </xs:sequence>
+        <xs:attribute name="name" type="xs:string" use="required" />
+    </xs:complexType>
+
+    <!-- el programa en sí -->
+    <xs:complexType name="sentence">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <!-- sobre variables -->
+            <xs:element name="def" type="definition" />
+            <xs:element name="assign" type="assignment" />
+
+            <!-- sobre funciones -->
+            <xs:element name="call" type="function_call" />
+
+            <!-- sobre I/O -->
+            <xs:element name="read" type="read" />
+            <xs:element name="write" type="xs:string" />
+
+            <!-- sobre bloques de control -->
+            <!-- condiciones -->
+            <xs:element name="condition" type="xs:string" />
+
+            <!-- if -->
+            <xs:sequence>
+                <xs:element name="if" type="sentence" />
+                <xs:element name="else" type="sentence" minOccurs="0" />
+            </xs:sequence>
+
+            <!-- while -->
+            <xs:element name="while" type="sentence" />
+
+            <!-- for -->
+            <xs:element name="for" type="for_block" />
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="blocks">
+        <xs:sequence>
+            <xs:element name="main" type="sentence" />
+            <xs:element name="function" type="function" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- un programa es un conjunto de sentencias -->
+    <xs:element name="program" type="blocks" />
+</xs:schema>
