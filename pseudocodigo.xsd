@@ -72,7 +72,6 @@
 
     <xs:complexType name="function">
         <xs:sequence>
-            <xs:element name="doc" type="xs:string" />
             <xs:element name="header" type="function_header" />
             <xs:element name="body" type="function_body" />
         </xs:sequence>
