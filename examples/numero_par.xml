@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="pseudocodigo.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<program>
+    <main>
+        <def type="int" variable="num" />
+        <read variable="num" message="Introduce un número:" />
+
+        <if>
+            <condition>$num mod 2 == 0</condition>
+            <write>El número $num es par.</write>
+        </if>
+        <else>
+            <write>El número $num NO es par.</write>
+        </else>
+
+    </main>
+</program>

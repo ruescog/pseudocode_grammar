@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="pseudocodigo.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<program>
+    <main>
+        <def type="int*" variable="lista" />
+        <read variable="lista" message="Introduce una lista de numeros:" />
+
+        <write>
+            La lista ordenada es: quicksort(lista)
+        </write>
+    </main>
+
+    <function name="quicksort">
+        <header>
+            <input type="int*" variable="lista" />
+            <output type="int*" />
+        </header>
+        <body>
+            <def type="int*" variable="resultado" />
+            <def type="int*" variable="l1_ordenada" />
+            <def type="int*" variable="l2_ordenada" />
+            <def type="int" variable="p_medio" />
+
+            <if>
+                <condition>longitud de $lista menor o igual que 1</condition>
+                <assign variable="resultado" value="$lista" />
+            </if>
+            <else>
+                <assign variable="p_medio" value="(longitud de $lista) / 2" />
+                <assign variable="l1_ordenada">
+                    <value>quicksort($lista[:$p_medio])</value>
+                </assign>
+                <assign variable="l2_ordenada">
+                    <value>quicksort($lista[$p_medio + 1:])</value>
+                </assign>
+                <assign variable="resultado">
+                    <value>mixed_lists(mixed_list($l1_ordenada, [$lista[$p_medio]]), $l2_ordenada)</value>
+                </assign>
+            </else>
+
+            <return>lista</return>
+        </body>
+    </function>
+
+    <function name="mixed_lists">
+        <header>
+            <input type="int*" variable="l1" />
+            <input type="int*" variable="l2" />
+            <output type="int*" />
+        </header>
+        <body>
+            <def type="int" variable="index_1" value="0" />
+            <def type="int" variable="index_2" value="0" />
+            <def type="int*" variable="resultado" value="[]" />
+
+            <while>
+                <condition>$index_1 menor que la longitud de $l1 Y $index_2 menor que la longitud de $2</condition>
+                <if>
+                    <condition>$l1[$index_1] menor que $l2[$index_2]</condition>
+                    <assign variable="resultado" value="resultado + [$l1[$index_1]]" />
+                    <assign variable="index_1" value="$index_1 + 1" />
+                </if>
+                <else>
+                    <assign variable="resultado" value="resultado + [$l2[$index_2]]" />
+                    <assign variable="index_2" value="$index_2 + 1" />
+                </else>
+            </while>
+
+
+            <while>
+                <condition>$index_1 menor que la longitud de $l1</condition>
+                <assign variable="resultado" value="resultado + [$l1[$index_1]]" />
+                <assign variable="index_1" value="$index_1 + 1" />
+            </while>
+
+            <while>
+                <condition>$index_2 menor que la longitud de $l2</condition>
+                <assign variable="resultado" value="resultado + [$l2[$index_2]]" />
+                <assign variable="index_2" value="$index_2 + 1" />
+            </while>
+
+            <return>resultado</return>
+        </body>
+    </function>
+</program>

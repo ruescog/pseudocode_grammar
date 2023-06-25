@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="pseudocodigo.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+
+<program>
+    <main>        
+        <def type="int" variable="num" />
+        <read variable="num" message="Introduce un número:" />
+
+        <def type="int" variable="div" value="1" />
+        <def type="int" variable="index" value="2" />
+        <while>
+            <condition>$index menor o igual que $num</condition>
+            <if>
+                <condition>$num módulo $index == 0</condition>
+                <assign variable="div" value="$div + 1" />
+            </if>
+
+            <assign variable="index" value="$index + 1" />
+        </while>
+
+        <if>
+            <condition>$div == 2</condition>
+            <write>El número es primo.</write>
+        </if>
+        <else>
+            <write>El número es compuesto.</write>
+        </else>
+
+    </main>
+</program>
